@@ -65,8 +65,22 @@ def add_expense(group_id, payer_id, description, amount, date):
     return expense["id"]
 
 
+def remove_member_expenses(member_id):
+    """Delete every expense this member paid for."""
+    kept = []
+    for expense in db.load_table("expenses"):
+        if expense["payer_id"] != str(member_id):
+            kept.append(expense)
+    db.save_table("expenses", kept)
+
+
 def remove_member(member_id):
-    """Delete one member from their group."""
+    """Delete one member, and the expenses they paid for with them.
+
+    Without the expenses the group page would crash: they would keep pointing
+    at a payer_id that no longer has a name (see issues/002).
+    """
+    remove_member_expenses(member_id)
     kept = []
     for member in db.load_table("members"):
         if member["id"] != str(member_id):
