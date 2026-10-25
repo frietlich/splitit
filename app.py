@@ -83,10 +83,10 @@ def show_expenses(group_id):
 
 
 def show_balances(group_id):
-    """Balances, work in progress: raw numbers keyed by member id."""
+    """Balances in plain words: one sentence per member."""
     st.subheader("Balances")
-    st.caption("Work in progress: one number per member id. Positive means the group owes them.")
-    st.write(logic.compute_balances(group_id))
+    for line in logic.balance_lines(group_id):
+        st.write(line)
 
 
 def show_settle_up(group_id):

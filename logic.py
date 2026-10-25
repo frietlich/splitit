@@ -99,6 +99,22 @@ def compute_balances(group_id):
     return balances
 
 
+def balance_lines(group_id):
+    """Return one sentence per member of the group, in the order of the members list."""
+    balances = compute_balances(group_id)
+    lines = []
+    for member in get_group_members(group_id):
+        amount = round(balances[member["id"]], 2)
+        if amount > 0:
+            lines.append(member["name"] + " is owed €" + format(amount, ".2f"))
+        elif amount < 0:
+            # The word "owes" already carries the sign, so drop the minus.
+            lines.append(member["name"] + " owes €" + format(-amount, ".2f"))
+        else:
+            lines.append(member["name"] + " is settled up")
+    return lines
+
+
 def expense_rows(group_id):
     """Build the rows of the expenses table on the group page (one dict per expense)."""
     members = get_group_members(group_id)
