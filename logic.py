@@ -36,7 +36,7 @@ def get_group_expenses(group_id):
 
 def group_title(group):
     """Return the text shown as the big heading at the top of a group page."""
-    return "Group " + group["id"]
+    return group["name"]
 
 
 def is_valid_name(name):
