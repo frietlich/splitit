@@ -2,6 +2,9 @@
 
 import db
 
+# The categories an expense can have. Fixed on purpose: see specs/feature-2-categories.md.
+CATEGORIES = ["rent", "groceries", "fun", "transport", "other"]
+
 
 def get_groups():
     """Return every group as a list of dicts."""
@@ -51,7 +54,7 @@ def add_member(group_id, name):
     return member["id"]
 
 
-def add_expense(group_id, payer_id, description, amount, date):
+def add_expense(group_id, payer_id, description, amount, date, category="other"):
     """Save a new expense, paid by one member for the whole group, and return its id."""
     expense = {
         "id": db.next_id("expenses"),
@@ -60,6 +63,7 @@ def add_expense(group_id, payer_id, description, amount, date):
         "description": description.strip(),
         "amount": amount,
         "date": date,
+        "category": category,
     }
     db.append_row("expenses", expense)
     return expense["id"]
@@ -127,6 +131,21 @@ def balance_lines(group_id):
         else:
             lines.append(member["name"] + " is settled up")
     return lines
+
+
+def category_totals(group_id):
+    """Return {category: total spent} for one group. Categories with no expenses are left out."""
+    totals = {}
+    for expense in get_group_expenses(group_id):
+        category = expense["category"]
+        amount = float(expense["amount"])
+        if category in totals:
+            totals[category] = totals[category] + amount
+        else:
+            totals[category] = amount
+    for category in totals:
+        totals[category] = round(totals[category], 2)
+    return totals
 
 
 def expense_rows(group_id):
