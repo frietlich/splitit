@@ -22,3 +22,4 @@ This is a starter project for a university course (Introduction to Programming, 
 - Build each task on a branch named after it, e.g. feature-2-categories. Never commit to main directly.
 - After every change, run the tests for the task and paste the final output. The output is the proof, not a sentence.
 - Never edit, delete or skip anything in tests/. If a test looks wrong, say so and stop.
+- Check before you claim, and check before you create. If you have not seen it this minute, say so instead of assuming.
